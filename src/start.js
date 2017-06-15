@@ -1,18 +1,21 @@
-require('dotenv').config();
-
-const express = require('express');
+require('dotenv').config();// loads environment variables from a .env file into process.env.
+//express
+const express = require('express');// web framework for node.
 const app = express();
+//server
 const http = require('http');
 const server = http.createServer(app)
+//socket
 const io = require('socket.io').listen(server);
-const logger = require('morgan');//new
-const config = require('../config/config.json');
-const path = require('path');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const configA = require('../config/main');
+//authentication
+const logger = require('morgan');//HTTP request logger middleware for node.js
+const bodyParser = require('body-parser');// Parse incoming request bodies in a middleware before your handlers, available under the req.body property.
+// const path = require('path');
+//DB
+const mongoose = require('mongoose');// MongoDB object modeling tool designed to work in an asynchronous environment.
+//local
 const router = require('./router');  
-
+const configA = require('../config/main');
 
 mongoose.Promise = global.Promise;
 const uristring = process.env.DB || 'localhost:27017/slack';
@@ -24,9 +27,9 @@ mongoose.connect(configA.database)
   error => console.log(`Error to connect with MongoDB.\nDetails: ${error}`)
 );
 
-//START LIST
+//START LISTENING
 server.listen(configA.port);
-console.log(`Started on port ${config.port}`);
+console.log(`Started on port ${configA.port}`);
 
 //AUTHENTICATION
 app.use(logger('dev')); // Log requests to API using morgan
@@ -42,11 +45,6 @@ app.use(function(req, res, next) {
 });
 
 router(app);  
-
-// // routing
-// app.get('/', function (req, res) {
-//   res.sendFile('http://localhost:8080/');
-// });
 
 //SOCKET
 var usernames = {};
