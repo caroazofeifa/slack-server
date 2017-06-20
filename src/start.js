@@ -52,12 +52,12 @@ var usernames = {};
 io.sockets.on('connection', function (socket) {
   // console.log('st socket');
   // when the client emits 'sendchat', this listens and executes
-  socket.on('sendchat', (data, time) => {
+  socket.on('sendchat', (data, time, id) => {
     console.log('chat',data, time);
     // we tell the client to execute 'updatechat' with 2 parameters
     //GUARDAR EN LA BASE ESE DATA
     
-    io.sockets.emit('updatechat', socket.username, data, time);
+    io.sockets.emit('updatechat', socket.username, data, time, id);
   });
 
   // when the client emits 'adduser', this listens and executes
