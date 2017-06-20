@@ -15,11 +15,14 @@ function setUserInfo(request) {
     firstName: request.profile.firstName,
     lastName: request.profile.lastName,
     email: request.email,
+    contacts: request.contacts,
   };
 }
 
 exports.login = function(req, res, next) {
+  console.log('LOGIN');
   let userInfo = setUserInfo(req.user);
+  console.log(userInfo);
   res.status(200).json({
     token: 'JWT ' + generateToken(userInfo),
     user: userInfo

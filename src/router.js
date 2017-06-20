@@ -2,6 +2,10 @@ const express = require('express');
 const passport = require('passport');
 
 const authenticationController = require('./controllers/authenticationController');
+const userController = require('./controllers/usersController');
+const chatsController = require('./controllers/chatsController');
+const messagesController = require('./controllers/messagesController');
+
 const passportService = require('../config/passport');
 
 const requireAuth = passport.authenticate('jwt', { session: false });  
@@ -16,6 +20,20 @@ function routes(app) {
   authRoutes.post('/register', authenticationController.register);
 
   authRoutes.post('/login', requireLogin, authenticationController.login);
+  
+  //USER INFORMATION
+  apiRoutes.get('/users',userController.getUsers);
+
+  apiRoutes.get('/user',userController.getUser);
+  //CHATS
+  apiRoutes.put('/chats/:id',chatsController.putChat);
+  apiRoutes.post('/chats',chatsController.postChat);
+  apiRoutes.get('/chats',chatsController.getChat);
+  //MESSAGES
+  apiRoutes.put('/messages/:id',messagesController.putMessage);
+  apiRoutes.post('/messages',messagesController.postMessage);
+  apiRoutes.get('/messages',messagesController.getMessages);
+  apiRoutes.get('/message',messagesController.getMessage);
 
   app.use('/api', apiRoutes);
 }

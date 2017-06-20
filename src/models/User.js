@@ -28,7 +28,7 @@ User.pre('save', function(next){
   const user = this,
   SALT_FACTOR = 5;
   if(user.isModified('password')){
-    console.log('MODIFIED PASSWORD BITCH');
+    // console.log('MODIFIED PASSWORD BITCH');
     bcrypt.genSalt(SALT_FACTOR,function(err,salt){
       if(err){
         return next(err);

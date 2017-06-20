@@ -1,7 +1,7 @@
 {
   "name": "simple-chat-api",
   "version": "1.0.0",
-  "description": "A simple chat api for the coderfactory blog article",
+  "description": "Api for Slack project",
   "main": "lib/app.js",
   "repository": "https://github.com/caroazofeifa/slack-server.git",
   "author": "Carolina Azofeifa Solano",
