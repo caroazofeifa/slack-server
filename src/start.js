@@ -58,7 +58,7 @@ io.sockets.on('connection', function (socket) {
   });
   socket.on('sendchat', (name, data, time, id) => {
     console.log('sendchat',name,connections[name]);
-    io.to(connections[name]).emit('updatechat', socket.username, data, time, id);
+    io.to(connections[name]).emit('updatechat', id, data, time, socket.username);
     //io.sockets.emit('updatechat', socket.username, data, time, id);
   });
 
