@@ -53,12 +53,15 @@ var connections =[];
 io.sockets.on('connection', function (socket) {
   //Guarda el id del socket con el id del usuario
   socket.on('register', function(name) {
-    console.log('register',connections);
+    // console.log('register',connections);
     connections[name] = socket.id;
   });
   socket.on('sendchat', (name, data, time, id) => {
-    console.log('sendchat',name,connections[name]);
-    io.to(connections[name]).emit('updatechat', id, data, time, socket.username);
+    // console.log('sendchat',name,connections[name]);
+    if(connections[name]!=socket.id){
+      // console.log('son iguales');
+      io.to(connections[name]).emit('updatechat', id, data, time, socket.username);      
+    }
     //io.sockets.emit('updatechat', socket.username, data, time, id);
   });
 
