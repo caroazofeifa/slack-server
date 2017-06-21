@@ -48,41 +48,34 @@ router(app);
 
 //SOCKET
 var usernames = {};
+var connections =[];
 
 io.sockets.on('connection', function (socket) {
-  // console.log('st socket');
-  // when the client emits 'sendchat', this listens and executes
-  socket.on('sendchat', (data, time, id) => {
-    console.log('chat',data, time);
-    // we tell the client to execute 'updatechat' with 2 parameters
-    //GUARDAR EN LA BASE ESE DATA
-    
-    io.sockets.emit('updatechat', socket.username, data, time, id);
+  //Guarda el id del socket con el id del usuario
+  socket.on('register', function(name) {
+    console.log('register',connections);
+    connections[name] = socket.id;
+  });
+  socket.on('sendchat', (name, data, time, id) => {
+    console.log('sendchat',name,connections[name]);
+    io.to(connections[name]).emit('updatechat', socket.username, data, time, id);
+    //io.sockets.emit('updatechat', socket.username, data, time, id);
   });
 
   // when the client emits 'adduser', this listens and executes
   socket.on('adduser', function(username){
     // console.log('user', username);
-    // we store the username in the socket session for this client
     socket.username = username;
-    // add the client's username to the global list
     usernames['username'] = username;
     console.log(usernames);
-    // echo to client they've connected
     //socket.emit('updatechat', 'SERVER', 'you have connected');
-    // echo globally (all clients) that a person has connected
     //socket.broadcast.emit('updatechat', 'SERVER', username + ' has connected');
-    // update the list of users in chat, client-side
     io.sockets.emit('updateusers', usernames);
   });
 
-  // when the user disconnects.. perform this
   socket.on('disconnect', function(){
-    // remove the username from global usernames list
     delete usernames[socket.username];
-    // update list of users in chat, client-side
     io.sockets.emit('updateusers', usernames);
-    // echo globally that this client has left
     //socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected');
   });
 });

@@ -11,7 +11,7 @@ exports.getChat = (req, res) => {
 };
 
 exports.postChat = (req, res) => {
-  // console.log('Create chat');
+  console.log('Create chat!!!!', req.body);
   const id= new ObjectID();
   const newChat = new Chat({
     _id: id,
@@ -32,8 +32,8 @@ exports.postChat = (req, res) => {
 };
 
 exports.putChat = (req, res) => {
-  console.log('Update chat BODY',req.body);
-  console.log('PARAMS',req.params.id);
+  // console.log('Update chat BODY',req.body);
+  // console.log('PARAMS',req.params.id);
   Chat.findByIdAndUpdate(req.params.id, req.body, (err, data) => {
     if (!err) {
       res.status(201).json({});
