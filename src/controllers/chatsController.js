@@ -11,7 +11,7 @@ exports.getChat = (req, res) => {
 };
 
 exports.postChat = (req, res) => {
-  console.log('Create chat!!!!', req.body);
+  // console.log('Create chat!!!!', req.body);
   const id= new ObjectID();
   const newChat = new Chat({
     _id: id,

@@ -5,6 +5,7 @@ const authenticationController = require('./controllers/authenticationController
 const userController = require('./controllers/usersController');
 const chatsController = require('./controllers/chatsController');
 const messagesController = require('./controllers/messagesController');
+const channelController = require('./controllers/channelsController');
 
 const passportService = require('../config/passport');
 
@@ -23,12 +24,15 @@ function routes(app) {
   
   //USER INFORMATION
   apiRoutes.get('/users',userController.getUsers);
-
   apiRoutes.get('/user',userController.getUser);
   //CHATS
   apiRoutes.put('/chats/:id',chatsController.putChat);
   apiRoutes.post('/chats',chatsController.postChat);
   apiRoutes.get('/chats',chatsController.getChat);
+  //CHANNELS
+  apiRoutes.put('/channels/:id',channelController.putChannel);
+  apiRoutes.post('/channels',channelController.postChannel);
+  apiRoutes.get('/channels',channelController.getChannel);
   //MESSAGES
   apiRoutes.put('/messages/:id',messagesController.putMessage);
   apiRoutes.post('/messages',messagesController.postMessage);

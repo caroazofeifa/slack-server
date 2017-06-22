@@ -51,35 +51,28 @@ var usernames = {};
 var connections =[];
 
 io.sockets.on('connection', function (socket) {
-  //Guarda el id del socket con el id del usuario
   socket.on('register', function(name) {
-    // console.log('register',connections);
     connections[name] = socket.id;
   });
-  socket.on('sendchat', (name, data, time, id) => {
-    // console.log('sendchat',name,connections[name]);
-    if(connections[name]!=socket.id){
-      // console.log('son iguales');
-      io.to(connections[name]).emit('updatechat', id, data, time, socket.username);      
-    }
-    //io.sockets.emit('updatechat', socket.username, data, time, id);
-  });
+  //socket.emit('sendchat', idMessageFor, data, time, idMessageFrom);
+  socket.on('sendchat', (idMessageFor, data, time, idMessageFrom,username,idMessage) => {
 
-  // when the client emits 'adduser', this listens and executes
+    if(connections[idMessageFor]!=socket.id){
+      io.to(connections[idMessageFor]).emit('updatechat', idMessageFor, data, time, idMessageFrom,username,idMessage);      
+    }
+  });
+  socket.on('sendchannel', (idMessageFor, data, time, idMessageFrom,username,idMessage) => {
+    //socket.broadcast.emit('updatechat', id, data, time,idM,name );
+    socket.broadcast.emit('updatechannel', idMessageFor, data, time, idMessageFrom,username,idMessage);
+  });
   socket.on('adduser', function(username){
-    // console.log('user', username);
     socket.username = username;
     usernames['username'] = username;
-    console.log(usernames);
-    //socket.emit('updatechat', 'SERVER', 'you have connected');
-    //socket.broadcast.emit('updatechat', 'SERVER', username + ' has connected');
     io.sockets.emit('updateusers', usernames);
   });
-
   socket.on('disconnect', function(){
     delete usernames[socket.username];
     io.sockets.emit('updateusers', usernames);
-    //socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected');
   });
 });
 
