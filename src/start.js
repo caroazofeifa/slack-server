@@ -47,14 +47,13 @@ app.use(function(req, res, next) {
 router(app);  
 
 //SOCKET
-var usernames = {};
+var usernames = [];//{};
 var connections =[];
 
 io.sockets.on('connection', function (socket) {
   socket.on('register', function(name) {
     connections[name] = socket.id;
   });
-  //socket.emit('sendchat', idMessageFor, data, time, idMessageFrom);
   socket.on('sendchat', (idMessageFor, data, time, idMessageFrom,username,idMessage) => {
 
     if(connections[idMessageFor]!=socket.id){
@@ -62,16 +61,22 @@ io.sockets.on('connection', function (socket) {
     }
   });
   socket.on('sendchannel', (idMessageFor, data, time, idMessageFrom,username,idMessage) => {
-    //socket.broadcast.emit('updatechat', id, data, time,idM,name );
     socket.broadcast.emit('updatechannel', idMessageFor, data, time, idMessageFrom,username,idMessage);
   });
   socket.on('adduser', function(username){
-    socket.username = username;
-    usernames['username'] = username;
+    console.log('username',username);
+    const userElement =usernames.find((element) => (element === username));
+    console.log('Element',userElement);
+    if(userElement===undefined){
+      console.log('Meto');
+      usernames.push(username);
+      console.log(usernames);
+    }
     io.sockets.emit('updateusers', usernames);
   });
-  socket.on('disconnect', function(){
-    delete usernames[socket.username];
+  socket.on('disconnect', function(userId){
+    const index = usernames.findIndex((element) => (element === userId));
+    usernames.splice(index,1);//DELETE FROM usernames --> userID;
     io.sockets.emit('updateusers', usernames);
   });
 });
