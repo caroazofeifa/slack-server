@@ -47,7 +47,7 @@ app.use(function(req, res, next) {
 router(app);  
 
 //SOCKET
-var usernames = [];//{};
+var usernames = [];
 var connections =[];
 
 io.sockets.on('connection', function (socket) {
@@ -55,7 +55,6 @@ io.sockets.on('connection', function (socket) {
     connections[name] = socket.id;
   });
   socket.on('sendchat', (idMessageFor, data, time, idMessageFrom,username,idMessage) => {
-
     if(connections[idMessageFor]!=socket.id){
       io.to(connections[idMessageFor]).emit('updatechat', idMessageFor, data, time, idMessageFrom,username,idMessage);      
     }
@@ -64,13 +63,9 @@ io.sockets.on('connection', function (socket) {
     socket.broadcast.emit('updatechannel', idMessageFor, data, time, idMessageFrom,username,idMessage);
   });
   socket.on('adduser', function(username){
-    console.log('username',username);
     const userElement =usernames.find((element) => (element === username));
-    console.log('Element',userElement);
     if(userElement===undefined){
-      console.log('Meto');
       usernames.push(username);
-      console.log(usernames);
     }
     io.sockets.emit('updateusers', usernames);
   });
